@@ -28,26 +28,27 @@ int printCode(char s[], int len)
 	int issn;
 	int isdqm;
 	int issqm;
-	isdqm = isn = issn = 0;
+	issqm = isdqm = isn = issn = 0;
 	for(i = 0;s[i]!='\0';i++){
 		
-		if(isdqm == 0 && s[i] == '\''){
+		// 是否在单引号内
+		if(s[i] == '\'' && s[i-1] != '\\' && s[i-2] != '\\'){
 			if(issqm == 0){
-				issqm = 1;
+				issqm = 1;	// 是
 			}else{
-				issqm = 0;
+				issqm = 0;	// 否
 			}
 		}
-		
-		if(s[i] == '"'&& issqm == 0 && isn == 0 && issn == 0){
+		// 是否在双引号内
+		if(issqm == 0 && s[i] == '"'){
 			if(isdqm == 0){
-				isdqm = 1;
+				isdqm = 1;	// 是
 			}else{
-				isdqm = 0;
+				isdqm = 0;	// 否
 			}
 		}
 		
-		if(s[i] == '/' && s[i+1] == '/' && isdqm == 0){
+		if(isdqm == 0 && s[i] == '/' && s[i+1] == '/'){
 			isn = 1;
 		}
 		// 取消单行不打印
@@ -56,7 +57,7 @@ int printCode(char s[], int len)
 		}
 		
 		
-		if(s[i] == '/' && s[i+1] == '*'){
+		if(isdqm == 0 && s[i] == '/' && s[i+1] == '*'){
 			issn = 1;
 		}
 		
