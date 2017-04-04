@@ -25,45 +25,48 @@ int main()
 
 void expand(char str[], char s2[])
 {
-	int j=0,i = 0;
-	char from= '\0';
-	char to= '\0';
+	int i,j;
+	char from,to;
+	
+	from = '\0';
+	to = '\0';
+	i = j = 0;
 	while(str[i]){
-		if((str[i] == '-' && from == '\0') || (str[i] == '_' && from == '\0')){
-			s2[j++] = str[i];
-			continue;
-		}
-		if(from == '\0'){
-			s2[j++] = from = str[i];
-		}else{
-			if(str[i] == '-'){
-				if(str[i+1] == '-'){
-					s2[0] = '\0';
+		
+		switch(str[i]){
+			case '-':
+				if(i==0 || str[i+1] == '\0'){
+					s2[j++] = str[i];
 				}else{
-					if(str[i+1] > from){
-						to = str[i+1];
-						i++;
-						// Ñ­»·
-						while(from <= to){
-							s2[j++] = from;
-							from ++;
+					from = str[i-1];
+					to = str[i+1];
+					if(from > to){
+						s2[j++] = from;
+						if(str[i+2] != '-'){
+							s2[j++] = to;
 						}
-						to = '\0';
-						from = '\0';
+					}else if(from < to){
+						while(from <= to){
+							if(from == to && str[i+2] == '-'){
+								break;
+							}
+							s2[j++] = from;
+							from++;
+						}
 					}else{
 						s2[j++] = from;
-						from = str[i];
 					}
+					from = '\0';
+					to = '\0';
 				}
-				
-				// && str[i+1] != '-' && str[i+1] > from
-				
-			}else{
-				s2[j++] = from;
-				from = str[i];
-			}
+				break;
+			default :
+				if(str[i-1]=='-'||str[i+1]=='-'){
+					break;
+				}
+				s2[j++] = str[i];
+				break;
 		}
-		
 		i++;
 	}
 	s2[j] = '\0';
